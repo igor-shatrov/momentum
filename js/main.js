@@ -42,7 +42,7 @@ function setBgGreet() {
     if (hours < 6) {
         greeting.innerText = "Доброй ночи";
         document.body.style.background = `URL('assets/images/night/${addZero(getRandomInt())}.jpg')`
-        c
+        document.body.style.color = 'white'
     } else if (hours < 12) {
         greeting.innerText = "Доброго утра";
         document.body.style.background = `URL('assets/images/morning/${addZero(getRandomInt())}.jpg')`
@@ -67,15 +67,25 @@ name.addEventListener('input', setInStorage)
 focus.addEventListener('input', setInStorage)
 name.addEventListener('keypress', pressEnter)
 focus.addEventListener('keypress', pressEnter)
-name.addEventListener('focus', clearOnFocus)
-focus.addEventListener('focus', clearOnFocus)
+name.addEventListener('click', clearOnFocus)
+focus.addEventListener('click', clearOnFocus)
+name.addEventListener('blur', onBlurElement)
+focus.addEventListener('blur', onBlurElement)
 
 
-function clearOnFocus(e){
-localStorage.setItem('last text',e.target.innerText)
-e.target.innerText=' '
-e.target.focus()
+function clearOnFocus(e) {
+    localStorage.setItem(`last-text-${e.target.id}`, e.target.innerText)
+    e.target.innerText = ''
+    e.target.focus()
 }
+
+function onBlurElement(e) {
+    if (e.target.innerText.trim() == '') {
+        e.target.innerText = localStorage.getItem(`last-text-${e.target.id}`)
+        localStorage.setItem(e.target.id, localStorage.getItem(`last-text-${e.target.id}`))
+    }
+}
+
 
 function pressEnter(e) {
     if (e.keyCode === 13) {
