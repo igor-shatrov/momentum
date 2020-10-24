@@ -5,12 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Momentum</title>
+    <link rel="stylesheet" href="css/owfont-regular.css">
     <link rel="stylesheet" href="css/style.css">
+    
     <script src="js/main.js" defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
+    <div class="line">
+        <div class="column">
+            <div id="quote">
+                <div id="quote-text"></div>
+                <div id="quote-author"></div>
+                <button id="quote-refresh">Refresh</button>
+            </div>
+        </div>
+        <div class="column">
+            <div class="city" contenteditable="true">Гродно</div>
+            <i class="weather-icon owf"></i>
+            <div class="temperature"></div>
+            <div class="humidity"></div>
+            <div class="speed"></div>
+            <div class="weather-description"></div>
+        </div>
+    </div>
     <time id="date"></time>
     <time id="time"></time>
     <h1>
@@ -20,7 +40,7 @@
 
     <h2>Какова твоя цель сегодня?</h2>
     <h2 id="focus" contenteditable="true"></h2>
-
+    <h3 id="quote"></h3>
 </body>
 
 </html>

@@ -15,6 +15,9 @@ function showTime() {
     let day = now.getDate();
     let mounth = now.getMonth();
 
+    if (seconds === 0 && minutes === 0) {
+        setBgGreet()
+    }
 
     date.innerText = `${daysOfWeek[dayOfWeek]}, ${addZero(day)} ${monthes[mounth]}`;
 
@@ -58,6 +61,7 @@ function setBgGreet() {
 }
 
 setBgGreet()
+
 
 function setInStorage(e) {
     localStorage.setItem(e.target.id, e.target.innerText)
@@ -106,3 +110,44 @@ function getIntroStorage(target) {
 
 getIntroStorage(name)
 getIntroStorage(focus)
+
+async function getQuote() {
+    const url = `https://quote-garden.herokuapp.com/api/v2/quotes/random`;
+    const res = await fetch(url);
+    const data = await res.json();
+    document.getElementById('quote-text').textContent = data.quote.quoteText
+    document.getElementById('quote-author').textContent = data.quote.quoteAuthor
+}
+document.addEventListener('DOMContentLoaded', getQuote);
+document.getElementById('quote-refresh').onclick = () => { getQuote() }
+
+
+
+
+const weatherIcon = document.querySelector('.weather-icon');
+const temperature = document.querySelector('.temperature');
+const humidity = document.querySelector('.humidity');
+const speed = document.querySelector('.speed');
+const weatherDescription = document.querySelector('.weather-description');
+const city = document.querySelector('.city')
+
+async function getWeather() {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.textContent}&lang=ru&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if(data.cod==='404'){
+        alert('error: City not found')
+        return
+    }
+
+    
+    weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+    temperature.textContent = `Температура: ${data.main.temp}°C`;
+    weatherDescription.textContent = data.weather[0].description;
+    humidity.textContent = `Влажность: ${data.main.humidity}%`;
+    speed.textContent = `Скорость ветра: ${data.wind.speed}м/с`
+}
+
+getWeather()
+city.addEventListener('blur', getWeather)
+city.addEventListener('keypress', pressEnter)
