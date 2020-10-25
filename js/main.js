@@ -5,6 +5,8 @@ const focus = document.getElementById('focus')
 const date = document.getElementById('date')
 const monthes = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря']
 const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+const background = setBGList()
+let bgClick = 0
 
 function showTime() {
     let now = new Date();
@@ -14,6 +16,7 @@ function showTime() {
     let dayOfWeek = now.getDay();
     let day = now.getDate();
     let mounth = now.getMonth();
+
 
     if (seconds === 0 && minutes === 0) {
         setBgGreet()
@@ -42,23 +45,39 @@ function setBgGreet() {
     let now = new Date();
     let hours = now.getHours();
 
+    document.body.style.background = background[hours]
     if (hours < 6) {
         greeting.innerText = "Доброй ночи";
-        document.body.style.background = `URL('assets/images/night/${addZero(getRandomInt())}.jpg')`
         document.body.style.color = 'white'
     } else if (hours < 12) {
         greeting.innerText = "Доброго утра";
-        document.body.style.background = `URL('assets/images/morning/${addZero(getRandomInt())}.jpg')`
     } else if (hours < 18) {
         greeting.innerText = "Доброго дня";
-        document.body.style.background = `URL('assets/images/day/${addZero(getRandomInt())}.jpg')`
         document.body.style.color = 'white'
     } else {
         greeting.innerText = "Хорошего Вечера";
-        document.body.style.background = `URL('assets/images/evening/${addZero(getRandomInt())}.jpg')`
         document.body.style.color = 'white'
     }
 }
+
+function setBGList() {
+
+    let arrBG = {}
+    for (let index = 0; index < 24; index++) {
+        if (index < 6) {
+            arrBG[index] = `URL('assets/images/night/${addZero(getRandomInt())}.jpg')`
+        } else if (index < 12) {
+            arrBG[index] = `URL('assets/images/morning/${addZero(getRandomInt())}.jpg')`
+        } else if (index < 18) {
+            arrBG[index] = `URL('assets/images/day/${addZero(getRandomInt())}.jpg')`
+        } else {
+            arrBG[index] = `URL('assets/images/evening/${addZero(getRandomInt())}.jpg')`
+        }
+    }
+    return arrBG
+
+}
+
 
 setBgGreet()
 
@@ -132,15 +151,16 @@ const weatherDescription = document.querySelector('.weather-description');
 const city = document.querySelector('.city')
 
 async function getWeather() {
+    if (city.textContent === '') return
+
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.textContent}&lang=ru&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
     const res = await fetch(url);
     const data = await res.json();
-    if(data.cod==='404'){
+    if (data.cod === '404') {
         alert('error: City not found')
         return
     }
-
-    
+    localStorage.setItem('city-weather', city.textContent)
     weatherIcon.classList.add(`owf-${data.weather[0].id}`);
     temperature.textContent = `Температура: ${data.main.temp}°C`;
     weatherDescription.textContent = data.weather[0].description;
@@ -148,6 +168,39 @@ async function getWeather() {
     speed.textContent = `Скорость ветра: ${data.wind.speed}м/с`
 }
 
+function setCityWeather() {
+    if (localStorage.getItem('city-weather')) {
+        city.textContent = localStorage.getItem('city-weather')
+    } else {
+        localStorage.setItem('city-weather', 'Гродно')
+        city.textContent = localStorage.getItem('city-weather')
+    }
+}
+setCityWeather()
 getWeather()
 city.addEventListener('blur', getWeather)
 city.addEventListener('keypress', pressEnter)
+
+function setCookie(cname, cvalue) {
+    var d = new Date();
+    d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function nextBackground() {
+    document.getElementById('next-background').disabled = true
+    let date = new Date()
+    let hours = date.getHours()
+    bgClick++
+    let sum = hours + bgClick
+    if (sum > 24) { sum -= 24 }
+    if (bgClick === 24) { bgClick = 0 }
+    let newBG = background[sum]
+    document.body.style.backgroundImage = newBG
+    setTimeout(function () { document.getElementById('next-background').disabled = false }, 2000)
+}
+
+
+
+document.getElementById('next-background').onclick = () => { nextBackground() }
