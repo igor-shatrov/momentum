@@ -130,20 +130,12 @@ function getIntroStorage(target) {
 getIntroStorage(name)
 getIntroStorage(focus)
 
-async function getQuote() {
-    const url = `https://quote-garden.herokuapp.com/api/v2/quotes/random`;
-    const res = await fetch(url);
-    const data = await res.json();
-    document.getElementById('quote-text').textContent = data.quote.quoteText
-    document.getElementById('quote-author').textContent = data.quote.quoteAuthor
-}
-document.addEventListener('DOMContentLoaded', getQuote);
-document.getElementById('quote-refresh').onclick = () => { getQuote() }
 
 
 
 
-const weatherIcon = document.querySelector('.weather-icon');
+
+
 const temperature = document.querySelector('.temperature');
 const humidity = document.querySelector('.humidity');
 const speed = document.querySelector('.speed');
@@ -161,7 +153,7 @@ async function getWeather() {
         return
     }
     localStorage.setItem('city-weather', city.textContent)
-    weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+    
     temperature.textContent = `Температура: ${data.main.temp}°C`;
     weatherDescription.textContent = data.weather[0].description;
     humidity.textContent = `Влажность: ${data.main.humidity}%`;

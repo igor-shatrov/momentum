@@ -41,16 +41,31 @@ h2 {
 
 .column{
     display: flex;
-    width: 50%;
+    width: 100%;
     justify-content: center;
     text-align: center;
     align-items: center;
+    height: 100px;
 }
 
 #next-background{
     position: fixed;
     top: 10px;
     left: 10px;
+}
+
+.temperature, .weather-icon, .humidity, .speed, .weather-description, .city{
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.5em;
+    font-weight: bold;
+    width: 50%;
+    text-align: center;
+}
+
+.weather-column{
+    text-align: end;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 @media(max-width:700px) {
