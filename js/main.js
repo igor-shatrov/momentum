@@ -7,6 +7,35 @@ const monthes = ['Января', 'Февраля', 'Марта', 'Апреля',
 const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
 const background = setBGList()
 let bgClick = 0
+const temperature = document.querySelector('.temperature');
+const humidity = document.querySelector('.humidity');
+const speed = document.querySelector('.speed');
+const weatherDescription = document.querySelector('.weather-description');
+const city = document.querySelector('.city')
+
+name.addEventListener('input', setInStorage)
+focus.addEventListener('input', setInStorage)
+name.addEventListener('keypress', pressEnter)
+focus.addEventListener('keypress', pressEnter)
+name.addEventListener('click', clearOnFocus)
+focus.addEventListener('click', clearOnFocus)
+name.addEventListener('blur', onBlurElement)
+focus.addEventListener('blur', onBlurElement)
+city.addEventListener('blur', getWeather)
+city.addEventListener('keypress', pressEnter)
+document.getElementById('next-background').onclick = () => { nextBackground() }
+
+setInterval(() => {
+    showTime()
+}, 1000);
+
+setBgGreet();
+
+getIntroStorage(name)
+getIntroStorage(focus)
+
+setCityWeather()
+getWeather()
 
 function showTime() {
     let now = new Date();
@@ -37,9 +66,7 @@ function getRandomInt(min = 1, max = 21) {
     return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
 }
 
-setInterval(() => {
-    showTime()
-}, 1000);
+
 
 function setBgGreet() {
     let now = new Date();
@@ -78,22 +105,9 @@ function setBGList() {
 
 }
 
-
-setBgGreet()
-
-
 function setInStorage(e) {
     localStorage.setItem(e.target.id, e.target.innerText)
 }
-
-name.addEventListener('input', setInStorage)
-focus.addEventListener('input', setInStorage)
-name.addEventListener('keypress', pressEnter)
-focus.addEventListener('keypress', pressEnter)
-name.addEventListener('click', clearOnFocus)
-focus.addEventListener('click', clearOnFocus)
-name.addEventListener('blur', onBlurElement)
-focus.addEventListener('blur', onBlurElement)
 
 
 function clearOnFocus(e) {
@@ -127,20 +141,6 @@ function getIntroStorage(target) {
 
 }
 
-getIntroStorage(name)
-getIntroStorage(focus)
-
-
-
-
-
-
-
-const temperature = document.querySelector('.temperature');
-const humidity = document.querySelector('.humidity');
-const speed = document.querySelector('.speed');
-const weatherDescription = document.querySelector('.weather-description');
-const city = document.querySelector('.city')
 
 async function getWeather() {
     if (city.textContent === '') return
@@ -168,10 +168,7 @@ function setCityWeather() {
         city.textContent = localStorage.getItem('city-weather')
     }
 }
-setCityWeather()
-getWeather()
-city.addEventListener('blur', getWeather)
-city.addEventListener('keypress', pressEnter)
+
 
 function setCookie(cname, cvalue) {
     var d = new Date();
@@ -192,7 +189,3 @@ function nextBackground() {
     document.body.style.backgroundImage = newBG
     setTimeout(function () { document.getElementById('next-background').disabled = false }, 2000)
 }
-
-
-
-document.getElementById('next-background').onclick = () => { nextBackground() }
